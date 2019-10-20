@@ -36,7 +36,7 @@ public class Collections {
     /**
      * 开始符号
      */
-    public Character startSymbol;
+    public Character startSymbol = 'D';
     /**
      *非终结符产生式集合
      */
@@ -48,7 +48,8 @@ public class Collections {
         Collections collects = new Collections();
         collects.initLL1();
         collects.getVnVt();
-        collects.FirstCollection(collects.LL1List);
+        collects.FirstCollection();
+        collects.FollowCollection();
     }
 
     /**
@@ -111,7 +112,7 @@ public class Collections {
     /**
      *求First集
      */
-    public void FirstCollection(ArrayList<String> LL1List){
+    public void FirstCollection(){
         for (String LL1Str: LL1List) {
             String[] split = LL1Str.split("->");
             //产生式左边为非终结符
@@ -121,12 +122,12 @@ public class Collections {
              */
             //计算Vn的First集
             if (!firstCollection.containsKey(Vn)){
-                CalFirstCollection(LL1List, Vn);
+                CalFirstCollection(Vn);
             }
         }
         System.out.println("---First集---");
         for (Character key : firstCollection.keySet()){
-            System.out.println("--- " + key + " : " + firstCollection.get(key) + " ---");
+            System.out.println(key + " : " + firstCollection.get(key));
         }
 
     }
@@ -139,7 +140,7 @@ public class Collections {
      *  2.2 First(X1)含ε，则将First(X1)\{ε}添加到First(T)中，并继续判断X2是否未终结符...
      *  2.3 First(X1)，First(X2)...均含ε，则将First(X1)\{ε}添加到First(T)中
      */
-    public void CalFirstCollection(ArrayList<String> LL1List, Character T){
+    public void CalFirstCollection(Character T){
         for (String LL1Str: LL1List) {
             String[] split = LL1Str.split("->");
             //产生式左边为非终结符
@@ -169,7 +170,7 @@ public class Collections {
                             }
                         }
                         if (!firstCollection.containsKey(Xn)){
-                            CalFirstCollection(LL1List, Xn);
+                            CalFirstCollection(Xn);
                         }
                         // 2.1 First(X1)不含ε，则将First(X1)添加到First(T)中
                         if (!firstCollection.get(Xn).contains('ε')){
@@ -202,6 +203,135 @@ public class Collections {
             }
         }
     }
+    /**
+     *求Follow集
+     */
+    public void FollowCollection(){
+        for (String LL1Str : LL1List){
+            String[] split = LL1Str.split("->");
+            //产生式左边为非终结符
+            char Vn = split[0].charAt(0);
+            if (!followCollection.containsKey(Vn)){
+                CalFollowCollection(Vn);
+            }
+        }
+        //CalFollowCollection('D');
+        System.out.println("---Follow集---");
+        for (Character key : followCollection.keySet()){
+            System.out.println(key + " : " + followCollection.get(key));
+        }
+    }
+    /**
+     * 计算Follow集
+     * 1)若B为开始符号S，则将#添加到Follow(B)中
+     * 2)A->αBγ，首先将First(γ)\{ε}添加到Follow(B)中
+     * 2.1 如果ε属于First(γ)，则将Follow(A)添加到Follow(B)中
+     * 3)A->αB，则将Follow(A)添加到Follow(B)中
+     */
+    public void CalFollowCollection(Character B){
+        //1)若B为开始符号S，则将#添加到Follow(B)中
+        if (B == startSymbol){
+            TreeSet<Character> characters = new TreeSet<>();
+            characters.add('#');
+            followCollection.put(B, characters);
+        }
+        for (String LL1Str : LL1List){
+            String[] split = LL1Str.split("->");
+            //产生式左边为非终结符
+            char Vn = split[0].charAt(0);
+            //产生式右边为待求项
+            String vtStr = split[1];
+            for (int i = 0; i < vtStr.length(); i++) {
+                char chari = vtStr.charAt(i);
+                if (chari == B){
+                    if(i < vtStr.length() - 1){
+                        //2)A->αBγ，首先将First(γ)\{ε}添加到Follow(B)中
+                        //γ为终结符,First(γ) = {γ}
+                        if (VtSet.contains(vtStr.charAt(i + 1))){
+                            if (followCollection.containsKey(chari)){
+                                TreeSet<Character> followTreeSet = followCollection.get(chari);
+                                followTreeSet.add(vtStr.charAt(i + 1));
+                            }else{
+                                TreeSet<Character> characters = new TreeSet<>();
+                                characters.add(vtStr.charAt(i + 1));
+                                followCollection.put(chari, characters);
+                            }
+                        }else{
+                            //γ为非终结符
+                            if (followCollection.containsKey(chari)){
+                                TreeSet<Character> followTreeSet = followCollection.get(chari);
+                                TreeSet<Character> firstTreeSet = firstCollection.get(vtStr.charAt(i + 1));
+                                firstTreeSet.remove('ε');
+                                followTreeSet.addAll(firstTreeSet);
+                                firstTreeSet.add('ε');
+                            }else{
+                                TreeSet<Character> characters = new TreeSet<>();
+                                TreeSet<Character> firstTreeSet = firstCollection.get(vtStr.charAt(i + 1));
+                                firstTreeSet.remove('ε');
+                                characters.addAll(firstTreeSet);
+                                firstTreeSet.add('ε');
+                                followCollection.put(chari, characters);
+                            }
+                            if (isFirstNull(vtStr, i + 1)){
+                                //2.1 如果ε属于First(γ)，则将Follow(A)添加到Follow(B)中
+                                if ((firstCollection.get(vtStr.charAt(i + 1)).contains('ε'))){
+                                    if (Vn == B){
+                                        break;
+                                    }
+                                    if (!followCollection.containsKey(Vn)){
+                                        CalFollowCollection(Vn);
+                                    }
+                                    if (followCollection.containsKey(chari)){
+                                        TreeSet<Character> followTreeSet = followCollection.get(chari);
+                                        followTreeSet.addAll(followCollection.get(Vn));
+                                    }else{
+                                        followCollection.put(chari, followCollection.get(Vn));
+                                    }
+                                }
+                            }
+
+                        }
+                    }
+                    //判断是否chari后面是否有元素
+                    //3)A->αB，则将Follow(A)添加到Follow(B)中
+                    if (i == vtStr.length() - 1){//chari后面没有元素
+                        if (Vn == B){
+                            break;
+                        }
+                        if (!followCollection.containsKey(Vn)){
+                            CalFollowCollection(Vn);
+                        }
+                        if (followCollection.containsKey(chari)){
+                            TreeSet<Character> followTreeSet = followCollection.get(chari);
+                            followTreeSet.addAll(followCollection.get(Vn));
+                        }else{
+                            followCollection.put(chari, followCollection.get(Vn));
+                        }
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * 判断ε是否属于First(γ)
+     */
+    public boolean isFirstNull(String vtStr, int i){
+        for (int j = i; j < vtStr.length(); j++) {
+            //如果包含非终结符，false
+            if (VtSet.contains(vtStr.charAt(i))){
+                return false;
+            }else{//vtStr.charAt(i)为非终结符
+                if (!firstCollection.get(vtStr.charAt(i)).contains('ε')){
+                    return false;
+                }
+            }
+            if (j == vtStr.length() - 1){
+                return true;
+            }
+        }
+        return true;
+    }
+
 
 
 
