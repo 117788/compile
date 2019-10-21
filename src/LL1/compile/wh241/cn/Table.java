@@ -6,6 +6,10 @@ import java.util.Iterator;
 import java.util.TreeSet;
 
 public class Table {
+    public String[][] analyzeTable;
+    public ArrayList<String> LL1List;
+    public TreeSet<Character> VtSet;
+    public TreeSet<Character> VnSet;
     /**
      * 临时测试主程序
      */
@@ -23,10 +27,10 @@ public class Table {
         collections.FirstCollection();
         collections.FollowCollection();
         collections.CalSelect();
-        String[][] analyzeTable = new String[collections.VnSet.size() + 1][collections.VtSet.size() + 1];
-        ArrayList<String> LL1List = collections.LL1List;
-        TreeSet<Character> VtSet = collections.VtSet;
-        TreeSet<Character> VnSet = collections.VnSet;
+        analyzeTable = new String[collections.VnSet.size() + 1][collections.VtSet.size() + 1];
+        LL1List = collections.LL1List;
+        VtSet = collections.VtSet;
+        VnSet = collections.VnSet;
         HashMap<String, TreeSet<Character>> selectCollection = collections.selectCollection;
         int m = 0;
         //初始化分析表
@@ -64,12 +68,24 @@ public class Table {
                 }
             }
         }
+
         for (int i = 0; i < analyzeTable.length; i++) {
             for (int j = 0; j < analyzeTable[i].length; j++) {
                 System.out.printf("%-10s",analyzeTable[i][j]);
             }
             System.out.println("");
         }
-
+    }
+    public String checkTable(Character A, Character a){
+        for (int i = 0; i < analyzeTable.length; i++) {
+            for (int j = 0; j < analyzeTable[i].length; j++) {
+                if (analyzeTable[i][0].charAt(0) == A && analyzeTable[0][j].charAt(0) == a){
+                    if (analyzeTable[i][j] != " "){
+                        return analyzeTable[i][j];
+                    }
+                }
+            }
+        }
+        return "";
     }
 }

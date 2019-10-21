@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 /**
- * 求First集、Follow集
+ * 求First集、Follow集、Select集
  */
 public class Collections {
     //定义数据结构
@@ -71,6 +71,7 @@ public class Collections {
         LL1List.add("C->+TC");
         LL1List.add("C->ε");
         */
+       /*
        LL1List.add("E->TA");
        LL1List.add("A->+E");
        LL1List.add("A->ε");
@@ -84,6 +85,16 @@ public class Collections {
        LL1List.add("P->a");
        LL1List.add("P->b");
        LL1List.add("P->^");
+
+        */
+       LL1List.add("E->TA");
+       LL1List.add("A->+TA");
+       LL1List.add("A->ε");
+       LL1List.add("T->FB");
+       LL1List.add("B->*FB");
+       LL1List.add("B->ε");
+       LL1List.add("F->(E)");
+       LL1List.add("F->i");
        /*
         System.out.println("---文法数组初始化---");
         for (String LL1Str : LL1List) {
@@ -147,15 +158,17 @@ public class Collections {
                 CalFirstCollection(Vn);
             }
         }
+        /*
         System.out.println("---First集---");
         for (Character key : firstCollection.keySet()){
             System.out.println(key + " : " + firstCollection.get(key));
-        }
+        }*/
         CalFirstS();
+        /*
         System.out.println("---FirstS集---");
         for (String key : firstSCollection.keySet()){
             System.out.println(key + " : " + firstSCollection.get(key));
-        }
+        }*/
 
     }
     /**
@@ -254,10 +267,12 @@ public class Collections {
             }
         }
         //CalFollowCollection('D');
+        /*
         System.out.println("---Follow集---");
         for (Character key : followCollection.keySet()){
             System.out.println(key + " : " + followCollection.get(key));
         }
+         */
     }
     /**
      * 计算Follow集
