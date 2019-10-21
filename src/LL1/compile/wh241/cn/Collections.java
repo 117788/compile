@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.TreeSet;
 
 /**
- * 求First集、Follow集、Select集
+ * 求First集、Follow集
  */
 public class Collections {
     //定义数据结构
@@ -14,17 +14,21 @@ public class Collections {
      */
     public ArrayList<String> LL1List = new ArrayList<String>();
     /**
-     *First集
+     *First集，单个字符
      */
     public HashMap<Character, TreeSet<Character>> firstCollection  = new HashMap<>();
+    /**
+     *FirstS集，多个字符
+     */
+    public HashMap<String, TreeSet<Character>> firstSCollection  = new HashMap<>();
     /**
      *Follow集
      */
     public HashMap<Character, TreeSet<Character>> followCollection  = new HashMap<>();
     /**
-     * select集
+     * Select集
      */
-    public HashMap<Character, HashMap<String, TreeSet<Character>>> selectCollection= new HashMap<>();
+    public HashMap<String, TreeSet<Character>> selectCollection = new HashMap<>();
     /**
      * 终结符集合
      */
@@ -36,11 +40,7 @@ public class Collections {
     /**
      * 开始符号
      */
-    public Character startSymbol = 'D';
-    /**
-     *非终结符产生式集合
-     */
-    public HashMap<Character, ArrayList<String>> expressionCollection = new HashMap<>();
+    public Character startSymbol = 'E';
     /**
      * 临时测试主类
      */
@@ -50,13 +50,18 @@ public class Collections {
         collects.getVnVt();
         collects.FirstCollection();
         collects.FollowCollection();
+        collects.CalSelect();
+        System.out.println("---Select集---");
+        for (String key : collects.selectCollection.keySet()){
+            System.out.println(key + " : " + collects.selectCollection.get(key));
+        }
     }
 
     /**
      * 测试文法数据
      */
     public void initLL1(){
-        LL1List.add("D->*FD");
+       /* LL1List.add("D->*FD");
         LL1List.add("D->ε");
         //LL1List.add("T->FD");
         LL1List.add("T->CD");
@@ -65,10 +70,26 @@ public class Collections {
         LL1List.add("F->i");
         LL1List.add("C->+TC");
         LL1List.add("C->ε");
+        */
+       LL1List.add("E->TA");
+       LL1List.add("A->+E");
+       LL1List.add("A->ε");
+       LL1List.add("T->FB");
+       LL1List.add("B->T");
+       LL1List.add("B->ε");
+       LL1List.add("F->PC");
+       LL1List.add("C->*C");
+       LL1List.add("C->ε");
+       LL1List.add("P->(E)");
+       LL1List.add("P->a");
+       LL1List.add("P->b");
+       LL1List.add("P->^");
+       /*
         System.out.println("---文法数组初始化---");
         for (String LL1Str : LL1List) {
             System.out.println(LL1Str);
         }
+        */
     }
 
     /**
@@ -108,6 +129,7 @@ public class Collections {
             System.out.println(vtItem);
         }
          */
+
     }
     /**
      *求First集
@@ -129,6 +151,11 @@ public class Collections {
         for (Character key : firstCollection.keySet()){
             System.out.println(key + " : " + firstCollection.get(key));
         }
+        CalFirstS();
+        System.out.println("---FirstS集---");
+        for (String key : firstSCollection.keySet()){
+            System.out.println(key + " : " + firstSCollection.get(key));
+        }
 
     }
     /**
@@ -145,11 +172,15 @@ public class Collections {
             String[] split = LL1Str.split("->");
             //产生式左边为非终结符
             char Vn = split[0].charAt(0);
+            //产生式右边为待求项
+            String vtStr = split[1];
+            //FirstS集
+            TreeSet<Character> firstSTree = new TreeSet<>();
+            firstSCollection.put(LL1Str, firstSTree);
             if (Vn == T){
-                //产生式右边为待求项
-                String vtStr = split[1];
                 //1) X1是终结符，则将X1添加到First(T)中
                 if (VtSet.contains(vtStr.charAt(0))){
+                    //First集
                     //首先判断firstCollection中是否含有key Vn，有则添加value，没有则创建一个
                     if (firstCollection.containsKey(Vn)){
                         TreeSet<Character> characterTreeSet = firstCollection.get(Vn);
@@ -159,14 +190,19 @@ public class Collections {
                         firstTreeSet.add(vtStr.charAt(0));
                         firstCollection.put(Vn, firstTreeSet);
                     }
+                    //FirstS集
+                    firstSTree.add(vtStr.charAt(0));
                 }else{//2) X1是非终结符
                     for (int i = 0; i < vtStr.length(); i++) {
                         char Xn = vtStr.charAt(i);
                         //2.3 First(X1)，First(X2)...均含ε，则将First(X1)\{ε}添加到First(T)中
                         if (i == vtStr.length() - 1 ){
                             if (firstCollection.get(Xn).contains('ε')){
+                                //First集
                                 TreeSet<Character> characterTreeSet = firstCollection.get(Vn);
                                 characterTreeSet.add('ε');
+                                //FirstS集
+                                firstSTree.add('ε');
                             }
                         }
                         if (!firstCollection.containsKey(Xn)){
@@ -178,7 +214,9 @@ public class Collections {
                                 TreeSet<Character> characterTreeSet = firstCollection.get(Vn);
                                 characterTreeSet.addAll(firstCollection.get(Xn));
                             }else{
-                                firstCollection.put(Vn, firstCollection.get(Xn));
+                                TreeSet<Character> characters = new TreeSet<>();
+                                characters.addAll(firstCollection.get(Xn));
+                                firstCollection.put(Vn, characters);
                             }
                             break;
                         }else{
@@ -331,10 +369,71 @@ public class Collections {
         }
         return true;
     }
-
-
-
-
+    /**
+     *计算某字符串α:X1X2X3...的First集
+     *T->X1X2X3...
+     * 1) X1是终结符，则将X1添加到First(α)中
+     * 2) X1是非终结符
+     *  2.1 First(X1)不含ε，则将First(X1)添加到First(α)中
+     *  2.2 First(X1)含ε，则将First(X1)\{ε}添加到First(α)中，并继续判断X2是否未终结符...
+     *  2.3 First(X1)，First(X2)...均含ε，则将First(X1)\{ε}添加到First(α)中
+     */
+    public void CalFirstS(){
+        for (String LL1Str: LL1List) {
+            String[] split = LL1Str.split("->");
+            //产生式左边为非终结符
+            char Vn = split[0].charAt(0);
+            //产生式右边为待求项
+            String vtStr = split[1];
+            //FirstS集
+            TreeSet<Character> firstSTree = new TreeSet<>();
+            firstSCollection.put(LL1Str, firstSTree);
+            //1) X1是终结符，则将X1添加到First(α)中
+            if (VtSet.contains(vtStr.charAt(0))){
+                firstSTree.add(vtStr.charAt(0));
+            }else{//2) X1是非终结符
+                for (int i = 0; i < vtStr.length(); i++) {
+                    char Xn = vtStr.charAt(i);
+                    //2.3 First(X1)，First(X2)...均含ε，则将First(X1)\{ε}添加到First(α)中
+                    if (i == vtStr.length() - 1 ){
+                        if (firstCollection.get(Xn).contains('ε')){
+                            firstSTree.add('ε');
+                        }
+                    }
+                    // 2.1 First(X1)不含ε，则将First(X1)添加到First(α)中
+                    if (!firstCollection.get(Xn).contains('ε')){
+                        firstSTree.addAll(firstCollection.get(Xn));
+                        break;
+                    }else{
+                        //2.2 First(X1)含ε，则将First(X1)\{ε}添加到First(α)中，并继续判断X2是否未终结符...
+                        TreeSet<Character> characters = firstCollection.get(Xn);
+                        characters.remove('ε');
+                        firstSTree.addAll(characters);
+                        characters.add('ε');
+                    }
+                }
+            }
+        }
+    }
+    /**
+     * 求Select集
+     */
+    public void CalSelect(){
+        for (String LL1Str: LL1List) {
+            String[] split = LL1Str.split("->");
+            //产生式左边为非终结符
+            char Vn = split[0].charAt(0);
+            //产生式右边为待求项
+            String vtStr = split[1];
+            TreeSet<Character> selectTree = new TreeSet<>();
+            selectTree.addAll(firstSCollection.get(LL1Str));
+            selectCollection.put(LL1Str,selectTree);
+            if (firstSCollection.get(LL1Str).contains('ε')){
+                selectTree.remove('ε');
+                selectTree.addAll(followCollection.get(Vn));
+            }
+        }
+    }
 
 
 }
