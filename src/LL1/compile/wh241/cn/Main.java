@@ -44,7 +44,6 @@ public class Main {
         jf.setSize(600, 900);                       // 设置窗口大小
         jf.setLocationRelativeTo(null);             // 把窗口位置设置到屏幕中心
         jf.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // 当点击窗口的关闭按钮时退出程序（没有这一句，程序不会退出）
-
         // 创建中间容器（面板容器）
         //JPanel panel = new JPanel(new FlowLayout());                // 创建面板容器，使用流式布局管理器
         // 创建内容面板容器
@@ -57,7 +56,6 @@ public class Main {
         layout.setAutoCreateGaps(true);
         // 自动创建容器与触到容器边框的组件之间的间隙
         layout.setAutoCreateContainerGaps(true);
-
         //创建文字
         JLabel label02 = new JLabel("<html>完整演示<br/></html>");
         label02.setFont(new Font(null, Font.PLAIN, 25));  // 设置字体，null 表示使用默认字体
@@ -81,83 +79,37 @@ public class Main {
         JLabel label08 = new JLabel("<html>Follow集<br/></html>");
         label08.setFont(new Font(null, Font.PLAIN, 16));  // 设置字体，null 表示使用默认字体
         label08.setToolTipText("Follow集");
-
         JButton btn5 = new JButton("全部展示");
         btn5.setBackground(new Color(255, 128,192));
         btn5.setFocusPainted(false);//去除文字周围边框
-
         /**
          * First集
          */
-        // 表头（列名）
-
-        /*
-        HashMap<Character, TreeSet<Character>> firstCollection = collections.firstCollection;
-        ArrayList<ArrayList<String>> firstList = new ArrayList<>();
-        for (Character key : firstCollection.keySet()){
-            ArrayList<String> strings = new ArrayList<>();
-            strings.add(key.toString());
-            strings.add(firstCollection.get(key).toString());
-            firstList.add(strings);
-        }
-        Object[][] objects = new Object[firstList.size()][];
-        for (int j = 0; j < firstList.size(); j++) {
-            objects[j] = firstList.get(j).toArray();
-        }
-
-         */
-        // 表格所有行数据
-        //Object[][] rowData2 = objects;
-
         // 创建一个表格，指定 表头 和 所有行数据
         dtm2 = new DefaultTableModel(rowData2, columnNames2);
         table2 = new JTable(dtm2);
-
         // 设置表格内容颜色
         table2.setForeground(Color.BLACK);                   // 字体颜色
         table2.setFont(new Font(null, Font.PLAIN, 14));      // 字体样式
         table2.setSelectionForeground(Color.DARK_GRAY);      // 选中后字体颜色
         table2.setSelectionBackground(Color.LIGHT_GRAY);     // 选中后字体背景
         table2.setGridColor(Color.GRAY);                     // 网格颜色
-
         // 设置表头
         table2.getTableHeader().setFont(new Font(null, Font.BOLD, 14));  // 设置表头名称字体样式
         table2.getTableHeader().setForeground(Color.RED);                // 设置表头名称字体颜色
         table2.getTableHeader().setResizingAllowed(false);               // 设置不允许手动改变列宽
         table2.getTableHeader().setReorderingAllowed(false);             // 设置不允许拖动重新排序各列
-
         // 设置行高
         table2.setRowHeight(30);
-
         // 第一列列宽设置为40
         table2.getColumnModel().getColumn(0).setPreferredWidth(40);
-
         // 设置滚动面板视口大小（超过该大小的行数据，需要拖动滚动条才能看到）
         table2.setPreferredScrollableViewportSize(new Dimension(400, 150));
-
         // 把 表格 放到 滚动面板 中（表头将自动添加到滚动面板顶部）
         JScrollPane scrollPane2 = new JScrollPane(table2);
         /**
          * Follow集
          */
-
-        /*
-        HashMap<Character, TreeSet<Character>> followCollection = collections.followCollection;
-        ArrayList<ArrayList<String>> followList = new ArrayList<>();
-        for (Character key : followCollection.keySet()){
-            ArrayList<String> strings = new ArrayList<>();
-            strings.add(key.toString());
-            strings.add(followCollection.get(key).toString());
-            followList.add(strings);
-        }
-        Object[][] objects1 = new Object[followList.size()][];
-        for (int j = 0; j < followList.size(); j++) {
-            objects1[j] = followList.get(j).toArray();
-        }
-
-         */
-        // 表格所有行数据
-        //Object[][] rowData3 = objects1;
         // 创建一个表格，指定 表头 和 所有行数据
         dtm3 = new DefaultTableModel(rowData3, columnNames3);
         table3 = new JTable(dtm3);
@@ -167,115 +119,78 @@ public class Main {
         table3.setSelectionForeground(Color.DARK_GRAY);      // 选中后字体颜色
         table3.setSelectionBackground(Color.LIGHT_GRAY);     // 选中后字体背景
         table3.setGridColor(Color.GRAY);                     // 网格颜色
-
         // 设置表头
         table3.getTableHeader().setFont(new Font(null, Font.BOLD, 14));  // 设置表头名称字体样式
         table3.getTableHeader().setForeground(Color.RED);                // 设置表头名称字体颜色
         table3.getTableHeader().setResizingAllowed(false);               // 设置不允许手动改变列宽
         table3.getTableHeader().setReorderingAllowed(false);             // 设置不允许拖动重新排序各列
-
         // 设置行高
         table3.setRowHeight(30);
-
         // 第一列列宽设置为40
         table3.getColumnModel().getColumn(0).setPreferredWidth(40);
-
         // 设置滚动面板视口大小（超过该大小的行数据，需要拖动滚动条才能看到）
         table3.setPreferredScrollableViewportSize(new Dimension(400, 150));
-
         // 把 表格 放到 滚动面板 中（表头将自动添加到滚动面板顶部）
         JScrollPane scrollPane3 = new JScrollPane(table3);
         /**
          * 预测分析表
          */
-        // 表格所有行数据
-        //Object[][] rowData = tableS.analyzeTable;
-        //String[] columnNames = tableS.analyzeTable[0];
         // 创建一个表格，指定 表头 和 所有行数据
         dtm = new DefaultTableModel(rowData, columnNames);
         table = new JTable(dtm);
-
         // 设置表格内容颜色
         table.setForeground(Color.BLACK);                   // 字体颜色
         table.setFont(new Font(null, Font.PLAIN, 14));      // 字体样式
         table.setSelectionForeground(Color.DARK_GRAY);      // 选中后字体颜色
         table.setSelectionBackground(Color.LIGHT_GRAY);     // 选中后字体背景
         table.setGridColor(Color.GRAY);                     // 网格颜色
-
         // 设置表头
         table.getTableHeader().setFont(new Font(null, Font.BOLD, 14));  // 设置表头名称字体样式
         table.getTableHeader().setForeground(Color.RED);                // 设置表头名称字体颜色
         table.getTableHeader().setResizingAllowed(false);               // 设置不允许手动改变列宽
         table.getTableHeader().setReorderingAllowed(false);             // 设置不允许拖动重新排序各列
-
         // 设置行高
         table.setRowHeight(30);
-
         // 第一列列宽设置为40
         table.getColumnModel().getColumn(0).setPreferredWidth(40);
-
         // 设置滚动面板视口大小（超过该大小的行数据，需要拖动滚动条才能看到）
         table.setPreferredScrollableViewportSize(new Dimension(400, 150));
-
         // 把 表格 放到 滚动面板 中（表头将自动添加到滚动面板顶部）
         JScrollPane scrollPane = new JScrollPane(table);
         /**
          * 预测分析过程
          */
-        /*Object[][] objects2 = new Object[anlyzeList.size()][];
-        for (int j = 0; j < anlyzeList.size(); j++) {
-            objects2[j] = anlyzeList.get(j).toArray();
-            //System.out.println(anlyzeList.get(j));
-        }
-
-         */
-        // 表格所有行数据
-        //Object[][] rowData1 = objects2;
-
         // 创建一个表格，指定 表头 和 所有行数据
         dtm1 = new DefaultTableModel(rowData1, columnNames1);
         table1 = new JTable(dtm1);
-
         // 设置表格内容颜色
         table1.setForeground(Color.BLACK);                   // 字体颜色
         table1.setFont(new Font(null, Font.PLAIN, 14));      // 字体样式
         table1.setSelectionForeground(Color.DARK_GRAY);      // 选中后字体颜色
         table1.setSelectionBackground(Color.LIGHT_GRAY);     // 选中后字体背景
         table1.setGridColor(Color.GRAY);                     // 网格颜色
-
         // 设置表头
         table1.getTableHeader().setFont(new Font(null, Font.BOLD, 14));  // 设置表头名称字体样式
         table1.getTableHeader().setForeground(Color.RED);                // 设置表头名称字体颜色
         table1.getTableHeader().setResizingAllowed(false);               // 设置不允许手动改变列宽
         table1.getTableHeader().setReorderingAllowed(false);             // 设置不允许拖动重新排序各列
-
         // 设置行高
         table1.setRowHeight(30);
-
         // 第一列列宽设置为40
         table1.getColumnModel().getColumn(0).setPreferredWidth(40);
-
         // 设置滚动面板视口大小（超过该大小的行数据，需要拖动滚动条才能看到）
         table1.setPreferredScrollableViewportSize(new Dimension(400, 300));
-
         // 把 表格 放到 滚动面板 中（表头将自动添加到滚动面板顶部）
         JScrollPane scrollPane1 = new JScrollPane(table1);
-
-
         // 把 面板容器 作为窗口的内容面板 设置到 窗口
         JScrollPane jScrollPane = new JScrollPane(panel);
         jf.setContentPane(jScrollPane);
-
         // 添加按钮的点击事件监听器
         btn5.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String fieldText = textField.getText();
                 String textAreaText = textArea.getText();
-                /*
-                System.out.println(fieldText);
-                System.out.println(textAreaText);
-                 */
                 goAnalyze(fieldText, textAreaText);
                 //First
                 dtm2.setDataVector(rowData2, columnNames2);
@@ -285,10 +200,8 @@ public class Main {
                 dtm.setDataVector(rowData, columnNames);
                 //预测分析过程
                 dtm1.setDataVector(rowData1, columnNames1);
-
             }
         });
-
         /*
          * 水平组（仅确定 X 轴方向的坐标/排列方式）
          *
@@ -311,7 +224,6 @@ public class Main {
         GroupLayout.ParallelGroup hParalGroup01 = layout.createParallelGroup().addGroup(hParalGroup02).addGroup(hParalGroup03).addComponent(label02).
                 addComponent(btn5).addGroup(hSeqGroup2).addGroup(hParalGroup04).addGroup(hParalGroup05);
         layout.setHorizontalGroup(hParalGroup01);  // 指定布局的 水平组（水平坐标）
-
         /*
          * 垂直组（仅确定 Y 轴方向的坐标/排列方式）
          *
@@ -471,6 +383,5 @@ public class Main {
             //System.out.println(anlyzeList.get(j));
         }
         rowData1 = objects2;
-
     }
 }

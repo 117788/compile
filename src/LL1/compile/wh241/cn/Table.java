@@ -11,13 +11,6 @@ public class Table {
     public TreeSet<Character> VtSet;
     public TreeSet<Character> VnSet;
     /**
-     * 临时测试主程序
-     */
-    public static void main(String[] args) {
-        Table table = new Table();
-        //table.getTable();
-    }
-    /**
      * 构造预测分析表
      */
     public void getTable(String LL1Str1){
@@ -68,7 +61,6 @@ public class Table {
                 }
             }
         }
-
         for (int i = 0; i < analyzeTable.length; i++) {
             for (int j = 0; j < analyzeTable[i].length; j++) {
                 System.out.printf("%-10s",analyzeTable[i][j]);

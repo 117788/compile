@@ -42,84 +42,20 @@ public class Collections {
      */
     public Character startSymbol = 'E';
     /**
-     * 临时测试主类
-     */
-    public static void main(String[] args) {
-        Collections collects = new Collections();
-        //collects.initLL1();
-        collects.getVnVt();
-        collects.FirstCollection();
-        collects.FollowCollection();
-        collects.CalSelect();
-        System.out.println("---Select集---");
-        for (String key : collects.selectCollection.keySet()){
-            System.out.println(key + " : " + collects.selectCollection.get(key));
-        }
-    }
-
-    /**
-     * 测试文法数据
+     * 文法数据
      */
     public void initLL1(String LL1Str){
-       /* LL1List.add("D->*FD");
-        LL1List.add("D->ε");
-        //LL1List.add("T->FD");
-        LL1List.add("T->CD");
-        LL1List.add("E->TC");
-        LL1List.add("F->(E)");
-        LL1List.add("F->i");
-        LL1List.add("C->+TC");
-        LL1List.add("C->ε");
-        */
-       /*
-       LL1List.add("E->TA");
-       LL1List.add("A->+E");
-       LL1List.add("A->ε");
-       LL1List.add("T->FB");
-       LL1List.add("B->T");
-       LL1List.add("B->ε");
-       LL1List.add("F->PC");
-       LL1List.add("C->*C");
-       LL1List.add("C->ε");
-       LL1List.add("P->(E)");
-       LL1List.add("P->a");
-       LL1List.add("P->b");
-       LL1List.add("P->^");
-        */
         String[] split = LL1Str.split("\n");
         for (int i = 0; i < split.length; i++) {
             LL1List.add(split[i]);
         }
-       /*
-       LL1List.add("E->TA");
-       LL1List.add("A->+TA");
-       LL1List.add("A->ε");
-       LL1List.add("T->FB");
-       LL1List.add("B->*FB");
-       LL1List.add("B->ε");
-       LL1List.add("F->(E)");
-       LL1List.add("F->i");
-        */
-       /*
-        System.out.println("---文法数组初始化---");
-        for (String LL1Str : LL1List) {
-            System.out.println(LL1Str);
-        }
-        */
     }
-
     /**
      * 求终结符和非终结符
      */
     public void getVnVt(){
         for (String LL1Str : LL1List){
             String[] split = LL1Str.split("->");
-            /*
-            for (String item : split){
-                System.out.println(item);
-                System.out.println("---");
-            }
-             */
             //先求终结符，在产生式左边
             char vnChar = split[0].charAt(0);
             VnSet.add(vnChar);
@@ -135,17 +71,6 @@ public class Collections {
                 }
             }
         }
-        /*
-        System.out.println("---非终结符集合---");
-        for (Character vnItem : VnSet) {
-            System.out.println(vnItem);
-        }
-        System.out.println("---终结符集合---");
-        for (Character vtItem : VtSet) {
-            System.out.println(vtItem);
-        }
-         */
-
     }
     /**
      *求First集
@@ -155,26 +80,12 @@ public class Collections {
             String[] split = LL1Str.split("->");
             //产生式左边为非终结符
             char Vn = split[0].charAt(0);
-            /*
-            System.out.println("---求First集，产生式左边：" + Vn +" ---" +"，产生式右边" +  vtStr +" ---");
-             */
             //计算Vn的First集
             if (!firstCollection.containsKey(Vn)){
                 CalFirstCollection(Vn);
             }
         }
-        /*
-        System.out.println("---First集---");
-        for (Character key : firstCollection.keySet()){
-            System.out.println(key + " : " + firstCollection.get(key));
-        }*/
         CalFirstS();
-        /*
-        System.out.println("---FirstS集---");
-        for (String key : firstSCollection.keySet()){
-            System.out.println(key + " : " + firstSCollection.get(key));
-        }*/
-
     }
     /**
      *计算某非终结符T的First集
@@ -271,13 +182,6 @@ public class Collections {
                 CalFollowCollection(Vn);
             }
         }
-        //CalFollowCollection('D');
-        /*
-        System.out.println("---Follow集---");
-        for (Character key : followCollection.keySet()){
-            System.out.println(key + " : " + followCollection.get(key));
-        }
-         */
     }
     /**
      * 计算Follow集
@@ -454,6 +358,4 @@ public class Collections {
             }
         }
     }
-
-
 }
