@@ -15,14 +15,14 @@ public class Table {
      */
     public static void main(String[] args) {
         Table table = new Table();
-        table.getTable();
+        //table.getTable();
     }
     /**
      * 构造预测分析表
      */
-    public void getTable(){
+    public void getTable(String LL1Str1){
         Collections collections = new Collections();
-        collections.initLL1();
+        collections.initLL1(LL1Str1);
         collections.getVnVt();
         collections.FirstCollection();
         collections.FollowCollection();

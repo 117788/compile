@@ -46,7 +46,7 @@ public class Collections {
      */
     public static void main(String[] args) {
         Collections collects = new Collections();
-        collects.initLL1();
+        //collects.initLL1();
         collects.getVnVt();
         collects.FirstCollection();
         collects.FollowCollection();
@@ -60,7 +60,7 @@ public class Collections {
     /**
      * 测试文法数据
      */
-    public void initLL1(){
+    public void initLL1(String LL1Str){
        /* LL1List.add("D->*FD");
         LL1List.add("D->ε");
         //LL1List.add("T->FD");
@@ -85,8 +85,12 @@ public class Collections {
        LL1List.add("P->a");
        LL1List.add("P->b");
        LL1List.add("P->^");
-
         */
+        String[] split = LL1Str.split("\n");
+        for (int i = 0; i < split.length; i++) {
+            LL1List.add(split[i]);
+        }
+       /*
        LL1List.add("E->TA");
        LL1List.add("A->+TA");
        LL1List.add("A->ε");
@@ -95,6 +99,7 @@ public class Collections {
        LL1List.add("B->ε");
        LL1List.add("F->(E)");
        LL1List.add("F->i");
+        */
        /*
         System.out.println("---文法数组初始化---");
         for (String LL1Str : LL1List) {
