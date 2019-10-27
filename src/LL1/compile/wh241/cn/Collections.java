@@ -125,7 +125,7 @@ public class Collections {
                     for (int i = 0; i < vtStr.length(); i++) {
                         char Xn = vtStr.charAt(i);
                         //2.3 First(X1)，First(X2)...均含ε，则将First(X1)\{ε}添加到First(T)中
-                        if (i == vtStr.length() - 1 ){
+                        if (i == vtStr.length() - 1 && firstCollection.containsKey(Xn)){
                             if (firstCollection.get(Xn).contains('ε')){
                                 //First集
                                 TreeSet<Character> characterTreeSet = firstCollection.get(Vn);
